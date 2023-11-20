@@ -2,7 +2,9 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { routes }  from './route.js';
 import { errorHandler } from './middlewares/errorHandlers.js';
+import { connectDb } from './config/dbConnection.js';
 
+connectDb();
 const app = express();
 
 dotenv.config({

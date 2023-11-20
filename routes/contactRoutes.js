@@ -11,7 +11,7 @@ import {
 
 
 router.get('/getContacts', getAllContacts);
-router.get('getContact/:id', getContact);
+router.get('/getContacts/:id', getContact);
 router.post('/createContact', createContact);
 router.put('/updateContact/:id', updateContact)
 router.delete('/deleteContact/:id', deleteContact)
