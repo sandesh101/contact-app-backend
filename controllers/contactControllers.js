@@ -1,32 +1,40 @@
+import asyncHandler from 'express-async-handler';
+
 //Get all the contacts
-const getAllContacts = (req, res) => {
+const getAllContacts = asyncHandler( async (req, res) => {
     res.status(200).json({message: "Getting all contact!!"})
-};
+});
 
 //Get specific contact
 
-const getContact = (req, res) => {
+const getContact = asyncHandler( async (req, res) => {
     const id = req.params.id;
     res.status(200).json({message: `Done Finding ${id}`})
-}
+});
 
 
 //Create contacts
-const createContact = (req,res) => {
+const createContact = asyncHandler( async(req,res) => {
+    const { name, email, phone} = req.body;
+
+    if(!name || !email || !phone){
+        res.status(400);
+        throw new Error("All fields are required");
+    }
     res.status(200).json({message: "Creating contact!!"})
-}
+});
 
 //Update contacts
-const updateContact = (req, res) => {
+const updateContact = asyncHandler( async (req, res) => {
     const id = req.params.id;
     res.status(200).json({message: `Updated ${id}!!`})
-}
+});
 
 //Delete contact
-const deleteContact = (req,res) => {
+const deleteContact = asyncHandler( async (req,res) => {
     const id = req.params.id;
     res.status(200).json({message: `Deleted ${id}`})
-}
+});
 
 
 
