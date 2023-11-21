@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import { userModel } from '../models/userModel.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 //routes from registering the user
 const registerUser = asyncHandler( async (req, res) => {
@@ -41,7 +42,36 @@ const registerUser = asyncHandler( async (req, res) => {
 });
 
 const loginUser = asyncHandler( async (req, res) => {
-    res.status(200).json({message: "Login Success!!"})
+    const { email, password } = req.body;
+
+    if(!email || !password){
+        res.status(400);
+        throw new Error("All fields are required");
+    }
+
+    const user = await userModel.findOne({ email });
+
+    if(user && await(bcrypt.compare(password, user.password))){
+        const accessToken = await jwt.sign({
+            user:{
+                username: user.username,
+                email: user.email,
+                id: user.id,
+            }
+        },
+        process.env.ACCESS_TOKEN,
+        {expiresIn: '10m'}
+        );
+        res.status(200).json({accessToken});
+    }
+    else{
+        res.status(401);
+        throw new Error("Invalid credentials")
+    }
 }); 
 
-export { registerUser, loginUser };
+const currentUser = asyncHandler ( async (req, res) => {
+    res.status(200).json({message: "Success", data: req.user});
+});
+
+export { registerUser, loginUser, currentUser };
