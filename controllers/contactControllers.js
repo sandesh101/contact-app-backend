@@ -9,7 +9,7 @@ const getAllContacts = asyncHandler( async (req, res) => {
 //Get specific contact
 
 const getContact = asyncHandler( async (req, res) => {
-    const contact = await contactModel.findById(req.params.id);
+    const contact = await contactModel.find({user_id: req.user.id});
     if(!contact){
         res.status(400);
         throw new Error("Contact not found!!")
@@ -20,7 +20,8 @@ const getContact = asyncHandler( async (req, res) => {
 
 //Create contacts
 const createContact = asyncHandler( async(req,res) => {
-    const { name, email, phone} = req.body;
+    console.log(`CONTACT: ${req.body}`);
+    const { id ,name, email, phone} = req.body;
 
     if(!name || !email || !phone){
         res.status(400);
@@ -28,6 +29,7 @@ const createContact = asyncHandler( async(req,res) => {
     }
 
     const contact = await contactModel.create({
+        id,
         name,
         email,
         phone

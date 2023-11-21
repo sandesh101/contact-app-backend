@@ -1,4 +1,5 @@
 import express  from "express";
+import { validateToken } from "../middlewares/validateTokenHandler.js";
 const router = express.Router();
 
 import { 
@@ -9,7 +10,7 @@ import {
     deleteContact 
 } from '../controllers/contactControllers.js';
 
-
+router.use(validateToken);
 router.get('/getContacts', getAllContacts);
 router.get('/getContacts/:id', getContact);
 router.post('/createContact', createContact);
